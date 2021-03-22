@@ -2,6 +2,7 @@
 
 require 'net/https'
 require 'json'
+require 'online_payment_platform/client/transaction'
 
 module OnlinePaymentPlatform
   class Client
