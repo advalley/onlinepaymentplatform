@@ -1,2 +1,4 @@
 .DS_Store
 *.swp
+.byebug_history
+.rspec_status

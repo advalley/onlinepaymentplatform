@@ -1,8 +1,10 @@
-require 'international_postcode_api/version'
-require 'international_postcode_api/client'
-require 'securerandom'
+# frozen_string_literal: true
 
-module InternationalPostcodeApi
+require 'online_payment_platform/version'
+require 'online_payment_platform/client'
+require 'online_payment_platform/client/status'
+
+module OnlinePaymentPlatform
   class << self
     attr_accessor :configuration
   end
@@ -13,13 +15,11 @@ module InternationalPostcodeApi
   end
 
   class Configuration
-    attr_accessor :api_key, :secret_key, :base_uri, :dynamic_endpoints
-    attr_reader :session_token
+    attr_accessor :api_key, :base_uri, :sandbox_mode
 
     def initialize
-      @base_uri = 'https://api.postcode.eu/international/v1/'
-      @session_token = SecureRandom.hex(8)
-      @dynamic_endpoints = true
+      @sandbox_mode = true
+      @base_uri = @sandbox_mode ? 'https://api-sandbox.onlinebetaalplatform.nl/v1/' : 'https://api.onlinebetaalplatform.nl/v1/'
     end
   end
 end
