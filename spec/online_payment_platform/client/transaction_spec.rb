@@ -11,7 +11,7 @@ RSpec.describe OnlinePaymentPlatform::Client do
 
   describe '#create' do
     it 'should raise error when required keys are missing' do
-      expect { OnlinePaymentPlatform::Client.create_transaction }.to raise_error(RuntimeError, 'Required key missing!')
+      expect { OnlinePaymentPlatform::Client.transactions.create }.to raise_error(RuntimeError, 'Required key missing!')
     end
   end
 end
