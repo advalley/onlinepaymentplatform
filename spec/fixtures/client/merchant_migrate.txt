@@ -1,0 +1,28 @@
+{
+    "uid": "mer_9c747fecac38",
+    "object": "merchant",
+    "created": 1554113700,
+    "updated": 1554113700,
+    "status": "pending",
+    "compliance": {
+        "level": 100,
+        "status": "verified",
+        "overview_url": "https://sandbox.onlinebetaalplatform.nl/nl/slug/mer_9c747fecac38/hash/overzicht",
+        "requirements": []
+    },
+    "type": "consumer",
+    "coc_nr": "987654321",
+    "name": "John Tester",
+    "phone": "31601234567",
+    "vat_nr": null,
+    "country": "nld",
+    "sector": null,
+    "addresses": [],
+    "trading_names": [],
+    "contacts": [],
+    "profiles": [],
+    "payment_methods": [],
+    "notify_url": "https://platform.com/notify",
+    "return_url": "https://platform.com/return",
+    "metadata": []
+}

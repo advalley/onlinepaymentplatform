@@ -9,6 +9,34 @@ RSpec.describe OnlinePaymentPlatform::Client do
     end
   end
 
+  describe '#migrate' do
+    before(:each) do
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
+         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
+
+      payload = {
+        emailaddress: 'test@test.com',
+        phone: '0612345678',
+        country: 'nld',
+        notify_url: 'https://test.com/notify_url'
+      }
+
+      @merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
+    end
+
+    it 'Should throw an error when missing required keys' do
+      expect{ @merchant.migrate }.to raise_error(RuntimeError, 'Required key missing!')
+    end
+
+    it 'Should migrate the merchant' do
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants/mer_9c747fecac38/migrate").
+         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_migrate.txt'), headers: {})
+
+      response = @merchant.migrate(coc_nr: '987654321', country: 'nld')
+      expect(response.features['coc_nr']).to eq('987654321')
+    end
+  end
+
   describe '#update' do
     it 'Should throw an error when not given any valid keys' do
       stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
