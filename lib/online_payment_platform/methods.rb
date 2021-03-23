@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Methods
   def assert_required_keys!(options, *keys)
     keys.each do |key|
-      raise 'Required key missing!' if options.dig(key).nil?
+      raise 'Required key missing!' if options[key].nil?
     end
   end
 
@@ -17,7 +19,7 @@ module Methods
   def post(uri, payload = {})
     config = OnlinePaymentPlatform.configuration
 
-    req = Net::HTTP::Post.new(uri, {'Content-Type': 'text/json'})
+    req = Net::HTTP::Post.new(uri, { 'Content-Type': 'text/json' })
     req['Authorization'] = "Bearer #{config.api_key}"
     req.body = payload.to_json
 

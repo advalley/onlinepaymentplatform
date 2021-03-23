@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OnlinePaymentPlatform
   class Client
     class Merchant
@@ -10,10 +12,10 @@ module OnlinePaymentPlatform
         @uid = @features['uid']
       end
 
-      def update(_opts = {})
+      def update(opts = {})
         parent = self.class
-        parent.assert_one_of!(_opts, :notify_url, :return_url, :metadata, :status)
-        response = parent.post parent.generate_uri('merchants', uid), _opts
+        parent.assert_one_of!(opts, :notify_url, :return_url, :metadata, :status)
+        response = parent.post parent.generate_uri('merchants', uid), opts
         Merchant.new response
       end
 
@@ -25,23 +27,22 @@ module OnlinePaymentPlatform
         update(status: 'suspended')
       end
 
-      def migrate(_opts = {})
+      def migrate(opts = {})
         parent = self.class
-        parent.assert_required_keys!(_opts, :coc_nr, :country)
-        response = parent.post parent.generate_uri('merchants', uid, 'migrate'), _opts
+        parent.assert_required_keys!(opts, :coc_nr, :country)
+        response = parent.post parent.generate_uri('merchants', uid, 'migrate'), opts
         Merchant.new response
       end
 
-      def self.create(_opts = {})
-        assert_required_keys!(_opts, :country, :emailaddress, :notify_url, :phone)
-        Merchant.new post(generate_uri('merchants'), _opts)
+      def self.create(opts = {})
+        assert_required_keys!(opts, :country, :emailaddress, :notify_url, :phone)
+        Merchant.new post(generate_uri('merchants'), opts)
       end
 
       def self.find(uid)
         response = fetch generate_uri('merchants', uid)
         Merchant.new response
       end
-
     end
 
     def self.merchants

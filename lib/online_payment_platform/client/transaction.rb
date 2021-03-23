@@ -5,8 +5,8 @@ module OnlinePaymentPlatform
     class Transaction
       extend Methods
 
-      def self.create(_opts = {})
-        assert_required_keys!(_opts, :merchant_id, :total_price, :products)
+      def self.create(opts = {})
+        assert_required_keys!(opts, :merchant_id, :total_price, :products)
       end
     end
 
