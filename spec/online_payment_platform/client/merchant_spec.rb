@@ -72,8 +72,8 @@ RSpec.describe OnlinePaymentPlatform::Client do
   end
 
   describe 'self#merchants' do
-    it 'Should return the Merchants class' do
-      expect(OnlinePaymentPlatform::Client.merchants).to eq(OnlinePaymentPlatform::Client::Merchants)
+    it 'Should return the Merchant class' do
+      expect(OnlinePaymentPlatform::Client.merchants).to eq(OnlinePaymentPlatform::Client::Merchant)
     end
   end
 

@@ -1,6 +1,6 @@
 module OnlinePaymentPlatform
   class Client
-    class Merchants
+    class Merchant
       attr_reader :uid, :features
 
       extend Methods
@@ -14,7 +14,7 @@ module OnlinePaymentPlatform
         parent = self.class
         parent.assert_one_of!(_opts, :notify_url, :return_url, :metadata, :status)
         response = parent.post parent.generate_uri('merchants', uid), _opts
-        Merchants.new response
+        Merchant.new response
       end
 
       def delete
@@ -29,23 +29,23 @@ module OnlinePaymentPlatform
         parent = self.class
         parent.assert_required_keys!(_opts, :coc_nr, :country)
         response = parent.post parent.generate_uri('merchants', uid, 'migrate'), _opts
-        Merchants.new response
+        Merchant.new response
       end
 
       def self.create(_opts = {})
         assert_required_keys!(_opts, :country, :emailaddress, :notify_url, :phone)
-        Merchants.new post(generate_uri('merchants'), _opts)
+        Merchant.new post(generate_uri('merchants'), _opts)
       end
 
       def self.find(uid)
         response = fetch generate_uri('merchants', uid)
-        Merchants.new response
+        Merchant.new response
       end
 
     end
 
     def self.merchants
-      Merchants
+      Merchant
     end
   end
 end
