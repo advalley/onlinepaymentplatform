@@ -3,6 +3,7 @@
 require 'online_payment_platform/version'
 require 'online_payment_platform/client'
 require 'online_payment_platform/client/status'
+require 'online_payment_platform/client/merchant'
 
 module OnlinePaymentPlatform
   class << self

@@ -1,16 +1,9 @@
+# frozen_string_literal: true
+
 module OnlinePaymentPlatform
   class Client
-    class Transaction
-      def self.create(_opts = {})
-        assert_present_keys!(_opts,  :merchant_id, :total_price, :products)
-      end
-
-
-      def self.assert_present_keys!(options, *keys)
-        keys.each do |key|
-          raise 'Required key missing!' if options.dig(key).nil?
-        end
-      end
+    def self.create_transaction(_opts = {})
+      assert_required_keys!(_opts, :merchant_id, :total_price, :products)
     end
   end
 end
