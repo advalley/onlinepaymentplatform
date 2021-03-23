@@ -44,20 +44,6 @@ RSpec.describe OnlinePaymentPlatform::Client do
   end
 
   describe '#migrate' do
-    before(:each) do
-      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
-         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
-
-      payload = {
-        emailaddress: 'test@test.com',
-        phone: '0612345678',
-        country: 'nld',
-        notify_url: 'https://test.com/notify_url'
-      }
-
-      @merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
-    end
-
     it 'Should throw an error when missing required keys' do
       expect{ @merchant.migrate }.to raise_error(RuntimeError, 'Required key missing!')
     end
@@ -73,35 +59,14 @@ RSpec.describe OnlinePaymentPlatform::Client do
 
   describe '#update' do
     it 'Should throw an error when not given any valid keys' do
-      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
-         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
-
-      payload = {
-        emailaddress: 'test@test.com',
-        phone: '0612345678',
-        country: 'nld',
-        notify_url: 'https://test.com/notify_url'
-      }
-
-      merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
-      expect{ merchant.update }.to raise_error(RuntimeError, 'Missing one of required keys!')
+      expect{ @merchant.update }.to raise_error(RuntimeError, 'Missing one of required keys!')
     end
 
     it 'Should throw an error when not given any valid keys' do
-      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
-         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
        stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants/mer_9c747fecac38").
          to_return(status: 200, body: File.read('spec/fixtures/client/merchant_update.txt'), headers: {})
 
-      payload = {
-        emailaddress: 'test@test.com',
-        phone: '0612345678',
-        country: 'nld',
-        notify_url: 'https://test.com/notify_url'
-      }
-
-      merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
-      merchant = merchant.update(return_url: 'https://example.com/new_return_url')
+      merchant = @merchant.update(return_url: 'https://example.com/new_return_url')
       expect(merchant.features['return_url']).to eq('https://example.com/new_return_url')
     end
   end
@@ -118,19 +83,7 @@ RSpec.describe OnlinePaymentPlatform::Client do
     end
 
     it 'Should create a merchant if valid' do
-      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
-         to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
-
-      payload = {
-        emailaddress: 'test@test.com',
-        phone: '0612345678',
-        country: 'nld',
-        notify_url: 'https://test.com/notify_url'
-      }
-
-      merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
-
-      expect(merchant.uid).to eq('mer_9c747fecac38')
+      expect(@merchant.uid).to eq('mer_9c747fecac38')
     end
   end
 
