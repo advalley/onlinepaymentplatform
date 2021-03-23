@@ -7,6 +7,40 @@ RSpec.describe OnlinePaymentPlatform::Client do
     OnlinePaymentPlatform.configure do |config|
       config.api_key = '7065b4c799838ed4c6e9f055816991b1'
     end
+
+    stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants").
+       to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
+
+    payload = {
+      emailaddress: 'test@test.com',
+      phone: '0612345678',
+      country: 'nld',
+      notify_url: 'https://test.com/notify_url'
+    }
+
+    @merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
+  end
+
+  describe '#delete' do
+    it 'should set merchant to delete' do
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants/mer_9c747fecac38").
+        with(body: "{\"status\":\"terminated\"}").
+        to_return(status: 200, body: File.read('spec/fixtures/client/merchant_delete.txt'))
+
+      merchant = @merchant.delete
+      expect(merchant.features['status']).to eq('terminated')
+    end
+  end
+
+  describe '#suspend' do
+    it 'should set merchant to suspended' do
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/merchants/mer_9c747fecac38").
+        with(body: "{\"status\":\"suspended\"}").
+        to_return(status: 200, body: File.read('spec/fixtures/client/merchant_suspend.txt'))
+
+      merchant = @merchant.suspend
+      expect(merchant.features['status']).to eq('suspended')
+    end
   end
 
   describe '#migrate' do
@@ -67,8 +101,8 @@ RSpec.describe OnlinePaymentPlatform::Client do
       }
 
       merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
-      response = merchant.update(return_url: 'https://example.com/new_return_url')
-      expect(response['return_url']).to eq('https://example.com/new_return_url')
+      merchant = merchant.update(return_url: 'https://example.com/new_return_url')
+      expect(merchant.features['return_url']).to eq('https://example.com/new_return_url')
     end
   end
 

@@ -12,8 +12,17 @@ module OnlinePaymentPlatform
 
       def update(_opts = {})
         parent = self.class
-        parent.assert_one_of!(_opts, :notify_url, :return_url, :metadata)
-        parent.post parent.generate_uri('merchants', uid), _opts
+        parent.assert_one_of!(_opts, :notify_url, :return_url, :metadata, :status)
+        response = parent.post parent.generate_uri('merchants', uid), _opts
+        Merchants.new response
+      end
+
+      def delete
+        update(status: 'terminated')
+      end
+
+      def suspend
+        update(status: 'suspended')
       end
 
       def migrate(_opts = {})
