@@ -1,0 +1,14 @@
+{
+    "livemode": false,
+    "uid": "ref_123456",
+    "object": "refund",
+    "created": 1596204264,
+    "updated": 1596204264,
+    "paid": null,
+    "amount": 6750,
+    "status": "created",
+    "message": null,
+    "internal_reason": null,
+    "fees": {},
+    "payout_description": "Refund from Product A"
+}
