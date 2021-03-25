@@ -1,0 +1,34 @@
+{
+    "livemode": true,
+    "uid": "tra_123456",
+    "object": "transaction",
+    "created": 1554113700,
+    "updated": 1554200096,
+    "completed": null,
+    "checkout": true,
+    "payment_method": "ideal",
+    "payment_flow": "direct",
+    "payment_details": [],
+    "amount": "12129",
+    "return_url": "https://platform.example.com/return/",
+    "redirect_url": "https://onlinebetaalplatform.nl/nl/betalen/?trx=tra_123456",
+    "notify_url": "https://platform.example.com/notify/",
+    "status": "created",
+    "metadata": [
+        {
+            "key": "external_id",
+            "value": "2015486"
+        }
+    ],
+    "statuses": [
+        {
+            "uid": "sta_123456",
+            "object": "status",
+            "created": 1554113700,
+            "updated": 1554113700,
+            "status": "created"
+        }
+    ],
+    "order": {},
+    "escrow": {}
+}

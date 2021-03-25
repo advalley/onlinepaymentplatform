@@ -22,8 +22,23 @@ RSpec.describe OnlinePaymentPlatform::Client do
   end
 
   describe '#create' do
-    it 'should raise error when required keys are missing' do
+    it 'Should raise error when required keys are missing' do
       expect { @merchant.transactions.create }.to raise_error(RuntimeError, 'Required key missing!')
+    end
+
+    it 'Should create a transaction' do
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions").
+         to_return(body: File.read('spec/fixtures/client/transaction.txt'))
+
+      payload = {
+        total_price: 10000,
+        products: [{
+          name: 'all products', price: 10000
+        }]
+      }
+
+      transaction = @merchant.transactions.create payload
+      expect(transaction['uid']).to eq('tra_123456')
     end
   end
 end
