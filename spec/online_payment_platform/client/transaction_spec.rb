@@ -11,14 +11,25 @@ RSpec.describe OnlinePaymentPlatform::Client do
     stub_request(:post, 'https://api-sandbox.onlinebetaalplatform.nl/v1/merchants')
       .to_return(status: 200, body: File.read('spec/fixtures/client/merchant_find.txt'))
 
-    payload = {
+    stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions").
+       to_return(body: File.read('spec/fixtures/client/transaction.txt'))
+
+    transaction_payload = {
+        total_price: 10000,
+        products: [{
+          name: 'all products', price: 10000
+        }]
+      }
+
+    merchant_payload = {
       emailaddress: 'test@test.com',
       phone: '0612345678',
       country: 'nld',
       notify_url: 'https://test.com/notify_url'
     }
 
-    @merchant = OnlinePaymentPlatform::Client.merchants.create(payload)
+    @merchant = OnlinePaymentPlatform::Client.merchants.create(merchant_payload)
+    @transaction = @merchant.transactions.create transaction_payload
   end
 
   describe '#create' do
@@ -27,18 +38,18 @@ RSpec.describe OnlinePaymentPlatform::Client do
     end
 
     it 'Should create a transaction' do
-      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions").
+      expect(@transaction['uid']).to eq('tra_123456')
+    end
+  end
+
+  describe '#find' do
+    it 'Should return a specific payment' do
+      stub_request(:get, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions/tra_123456").
          to_return(body: File.read('spec/fixtures/client/transaction.txt'))
 
-      payload = {
-        total_price: 10000,
-        products: [{
-          name: 'all products', price: 10000
-        }]
-      }
-
-      transaction = @merchant.transactions.create payload
-      expect(transaction['uid']).to eq('tra_123456')
+      response = @merchant.transactions.find('tra_123456')
+      expect(response['uid']).to eq('tra_123456')
     end
   end
 end
+
