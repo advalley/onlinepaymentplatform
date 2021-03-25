@@ -3,15 +3,17 @@
 module OnlinePaymentPlatform
   class Client
     class Transaction
-      extend Methods
+      include Methods
 
-      def self.create(opts = {})
-        assert_required_keys!(opts, :merchant_id, :total_price, :products)
+      attr_reader :merchant_uid
+
+      def initialize(merchant_uid)
+        @merchant_uid = merchant_uid
       end
-    end
 
-    def self.transactions
-      Transaction
+      def create(opts = {})
+        assert_required_keys!(opts, :total_price, :products)
+      end
     end
   end
 end

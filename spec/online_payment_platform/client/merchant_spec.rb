@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe OnlinePaymentPlatform::Client do
   before :all do
     OnlinePaymentPlatform.configure do |config|
-      config.api_key = '7065b4c799838ed4c6e9f055816991b1'
+      config.api_key = 'api-test'
     end
 
     stub_request(:post, 'https://api-sandbox.onlinebetaalplatform.nl/v1/merchants')

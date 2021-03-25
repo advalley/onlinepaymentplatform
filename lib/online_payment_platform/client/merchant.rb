@@ -3,13 +3,14 @@
 module OnlinePaymentPlatform
   class Client
     class Merchant
-      attr_reader :uid, :features
+      attr_reader :uid, :features, :transactions
 
       extend Methods
 
       def initialize(opts = {})
         @features = opts
         @uid = @features['uid']
+        @transactions = Transaction.new @uid
       end
 
       def update(opts = {})
