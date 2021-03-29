@@ -31,6 +31,10 @@ module OnlinePaymentPlatform
         post generate_uri(:transactions, uid, :refunds), opts
       end
 
+      def refunds
+        fetch generate_uri(:transactions, uid, :refunds)
+      end
+
       private
 
       def set_params(opts)

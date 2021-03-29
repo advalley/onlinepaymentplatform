@@ -52,7 +52,7 @@ RSpec.describe OnlinePaymentPlatform::Client do
     end
   end
 
-  describe '#refund' do
+  describe '#refund!' do
     it 'Should refund the payment' do
       stub_request(:get, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions/tra_123456").
          to_return(body: File.read('spec/fixtures/client/transaction.txt'))
@@ -63,6 +63,22 @@ RSpec.describe OnlinePaymentPlatform::Client do
       transaction = @merchant.transactions.find('tra_123456')
       response = transaction.refund!(amount: 21500)
       expect(response['uid']).to eq('ref_123456')
+    end
+  end
+
+  describe '#refunds' do
+    it 'Should list the refunds' do
+      stub_request(:get, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions/tra_123456").
+         to_return(body: File.read('spec/fixtures/client/transaction.txt'))
+
+      stub_request(:post, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions/tra_123456/refunds").
+         to_return(body: File.read('spec/fixtures/client/transaction_refund.txt'))
+
+      stub_request(:get, "https://api-sandbox.onlinebetaalplatform.nl/v1/transactions/tra_123456/refunds").
+        to_return(body: File.read('spec/fixtures/client/transaction_refund_list.txt'))
+
+      transaction = @merchant.transactions.find('tra_123456')
+      expect(transaction.refunds['data'].count).to eq(1)
     end
   end
 end
